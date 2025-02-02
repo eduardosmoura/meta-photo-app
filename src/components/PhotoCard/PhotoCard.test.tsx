@@ -1,66 +1,58 @@
-// tests/PhotoCard.test.tsx
 import React from 'react';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { PhotoCard } from './PhotoCard';
-
-// Sample photo data to pass as prop
-const samplePhoto = {
-  id: 1,
-  title: 'Test Photo',
-  url: 'http://example.com/photo.jpg',
-  thumbnailUrl: 'http://example.com/thumb.jpg',
-  albumId: 10,
-  album: {
-    id: 10,
-    title: 'Test Album',
-    userId: 100,
-    user: {
-      id: 100,
-      name: 'Test User',
-      username: 'Bret',
-      email: 'test@example.com',
-      address: {
-        street: 'Kulas Light',
-        suite: 'Apt. 556',
-        city: 'Gwenborough',
-        zipcode: '92998-3874',
-        geo: {
-          lat: '-37.3159',
-          lng: '81.1496'
-        }
-      },
-      phone: '1-770-736-8031 x56442',
-      website: 'hildegard.org',
-      company: {
-        name: 'Romaguera-Crona',
-        catchPhrase: 'Multi-layered client-server neural-net',
-        bs: 'harness real-time e-markets'
-      }
-    }
-  }
-};
+import { samplePhoto } from '../../../test/fixtures/samplePhoto';
 
 describe('PhotoCard Component', () => {
-  it('renders photo details correctly', () => {
+  beforeEach(() => {
     render(<PhotoCard photo={samplePhoto} />);
-
-    // Check that the photo title is rendered
-    expect(screen.getByText(/Test Photo/i)).toBeInTheDocument();
-
-    // Check that the album title is rendered
-    expect(screen.getByText(/Test Album/i)).toBeInTheDocument();
-
-    // Check that the user name is rendered
-    expect(screen.getByText(/Test User/i)).toBeInTheDocument();
   });
 
-  it('renders an image with the correct src and alt attributes', () => {
-    render(<PhotoCard photo={samplePhoto} />);
+  describe('when rendering the textual information', () => {
+    it('should render the photo title inside a heading element', () => {
+      const titleHeading = screen.getByRole('heading', { level: 2 });
+      expect(titleHeading).toHaveTextContent(samplePhoto.title);
+    });
 
-    const image = screen.getByRole('img') as HTMLImageElement;
-    expect(image).toBeInTheDocument();
-    expect(image.src).toContain('http://example.com/thumb.jpg');
-    expect(image.alt).toBe('Test Photo');
+    it('should render the album title inside the element labeled "Album:"', () => {
+      // Find a paragraph whose text starts with "Album:" then check that it includes the album title.
+      const albumParagraph = screen.getAllByText((content, element) => {
+        return (
+          element?.tagName.toLowerCase() === 'p' && content.startsWith('Album:')
+        );
+      })[0];
+      expect(albumParagraph).toHaveTextContent(samplePhoto.album.title);
+    });
+
+    it('should render the user details (name and email) inside the element labeled "By:"', () => {
+      // Find a paragraph whose text starts with "By:" and then check that it contains the user name and email.
+      const userParagraph = screen.getAllByText((content, element) => {
+        return (
+          element?.tagName.toLowerCase() === 'p' && content.startsWith('By:')
+        );
+      })[0];
+      expect(userParagraph).toHaveTextContent(samplePhoto.album.user.name);
+      expect(userParagraph).toHaveTextContent(samplePhoto.album.user.email);
+    });
+  });
+
+  describe('when rendering the image element', () => {
+    let image: HTMLImageElement;
+    beforeEach(() => {
+      image = screen.getByRole('img') as HTMLImageElement;
+    });
+
+    it('should render an image element', () => {
+      expect(image).toBeDefined();
+    });
+
+    it('should set the image src attribute correctly', () => {
+      expect(image.src).toContain(samplePhoto.thumbnailUrl);
+    });
+
+    it('should set the image alt attribute correctly', () => {
+      expect(image.alt).toBe(samplePhoto.title);
+    });
   });
 });
