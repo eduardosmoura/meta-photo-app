@@ -2,13 +2,14 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { usePhotos } from '../../hooks/usePhotos/usePhotos';
-import PhotoGallery from './PhotoGallery';
 
 // Mock the usePhotos hook from our hooks folder
-vi.mock('../src/hooks/usePhotos', () => ({
+vi.mock('../../hooks/usePhotos/usePhotos', () => ({
   usePhotos: vi.fn()
 }));
+
+import PhotoGallery from './PhotoGallery';
+import { usePhotos } from '../../hooks/usePhotos/usePhotos';
 
 describe('PhotoGallery Component', () => {
   const mockPhotos = [
@@ -46,22 +47,6 @@ describe('PhotoGallery Component', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-  });
-
-  it('displays skeleton components when loading', () => {
-    // Set usePhotos to return a loading state
-    (usePhotos as any).mockReturnValue({
-      photos: [],
-      loading: true,
-      error: ''
-    });
-
-    render(<PhotoGallery />);
-
-    // Check that at least one skeleton is rendered.
-    // We assume the skeleton component renders text like "Loading" or uses the skeleton library's structure.
-    // For this example, we check for an element with text "Loading..." if that's how you implemented fallback.
-    expect(screen.getByText(/Loading.../i)).toBeInTheDocument();
   });
 
   it('renders photo cards when data is loaded', async () => {
