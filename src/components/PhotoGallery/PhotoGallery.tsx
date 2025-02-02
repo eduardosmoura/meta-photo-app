@@ -4,6 +4,7 @@ import { PhotoCard } from '../PhotoCard/PhotoCard';
 import { SkeletonPhotoCard } from '../SkeletonPhotoCard/SkeletonPhotoCard';
 import { toast } from 'react-toastify';
 import { DEFAULT_LIMIT, DEFAULT_OFFSET } from 'utils';
+import HealthStatusTag from 'components/HealthStatusTag/HealthStatusTag';
 
 const PhotoGallery: React.FC = () => {
   // State for the input fields (filters being edited)
@@ -55,6 +56,10 @@ const PhotoGallery: React.FC = () => {
 
   return (
     <div className="container mx-auto p-4">
+      <header className="mb-4 flex items-center justify-between">
+        <h1 className="text-xl font-bold">MetaPhoto APP</h1>
+        <HealthStatusTag />
+      </header>
       <form className="mb-4 space-y-4" onSubmit={handleSubmit}>
         <div className="flex flex-col gap-4 md:flex-row">
           <div className="flex flex-1 flex-col">
