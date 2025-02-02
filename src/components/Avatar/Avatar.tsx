@@ -6,7 +6,7 @@ interface AvatarProps {
   className?: string;
 }
 
-const placeholderImage = '../../src/assets/logo.svg';
+const placeholderImage = '/assets/logo.svg';
 
 export const Avatar: React.FC<AvatarProps> = ({ src, alt, className }) => {
   const handleImageError = (

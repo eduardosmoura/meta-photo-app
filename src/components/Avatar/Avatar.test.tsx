@@ -4,8 +4,6 @@ import { render, screen } from '@testing-library/react';
 import { Avatar } from './Avatar';
 
 describe('Avatar Component', () => {
-  const placeholderImage = '../../src/assets/logo.svg';
-
   it('renders an image with the correct src and alt attributes', () => {
     render(<Avatar src="http://example.com/test.jpg" alt="Test Image" />);
 
