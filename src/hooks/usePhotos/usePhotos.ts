@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
-import { apiService } from '../../services/api';
-import { toast } from 'react-toastify';
 import { Photo } from 'types';
+import { apiService } from '../../services/api';
+import { handleApiError } from '../../utils/apiErrorHandler';
 
 export interface PhotoFilters {
   title?: string;
@@ -13,8 +13,8 @@ export interface PhotoFilters {
 
 export const usePhotos = (filters: PhotoFilters) => {
   const [photos, setPhotos] = useState<Photo[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   // Memoize filter query string to avoid re-fetching if filters haven't changed
   const queryKey = useMemo(() => JSON.stringify(filters), [filters]);
@@ -29,13 +29,8 @@ export const usePhotos = (filters: PhotoFilters) => {
         });
         setPhotos(data);
       } catch (err: unknown) {
-        if (err instanceof Error) {
-          setError(err.message);
-          toast.error('Failed to load photos.');
-        } else {
-          setError(String(err));
-          toast.error('An unexpected error occurred while loading photos.');
-        }
+        const errorMessage = handleApiError(err);
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }

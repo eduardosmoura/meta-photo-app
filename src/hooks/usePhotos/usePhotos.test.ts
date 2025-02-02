@@ -1,15 +1,13 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi, Mock } from 'vitest';
+import { usePhotos } from './usePhotos';
+import { apiService } from '../../services/api';
 
-// Mock the apiService module using Vitest
 vi.mock('../../services/api', () => ({
   apiService: {
     get: vi.fn()
   }
 }));
-
-import { usePhotos } from './usePhotos';
-import { apiService } from '../../services/api';
 
 describe('usePhotos Hook', () => {
   let mockGet: Mock<any, any>;
