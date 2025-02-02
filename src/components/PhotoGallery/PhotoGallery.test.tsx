@@ -1,102 +1,140 @@
 // tests/PhotoGallery.test.tsx
 import React from 'react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import PhotoGallery from './PhotoGallery';
+import { usePhotos } from '../../hooks/usePhotos/usePhotos';
+import { mockPhotos } from '../../../test/fixtures/samplePhoto';
 
-// Mock the usePhotos hook from our hooks folder
+// Mock the usePhotos hook to control its output
 vi.mock('../../hooks/usePhotos/usePhotos', () => ({
   usePhotos: vi.fn()
 }));
 
-import PhotoGallery from './PhotoGallery';
-import { usePhotos } from '../../hooks/usePhotos/usePhotos';
-
 describe('PhotoGallery Component', () => {
-  const mockPhotos = [
-    {
-      id: 1,
-      title: 'Test Photo 1',
-      url: 'http://example.com/photo1.jpg',
-      thumbnailUrl: 'http://example.com/thumb1.jpg',
-      album: {
-        id: 10,
-        title: 'Test Album 1',
-        user: {
-          id: 100,
-          name: 'User One',
-          email: 'user1@example.com'
-        }
-      }
-    },
-    {
-      id: 2,
-      title: 'Test Photo 2',
-      url: 'http://example.com/photo2.jpg',
-      thumbnailUrl: 'http://example.com/thumb2.jpg',
-      album: {
-        id: 20,
-        title: 'Test Album 2',
-        user: {
-          id: 200,
-          name: 'User Two',
-          email: 'user2@example.com'
-        }
-      }
-    }
-  ];
-
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('renders photo cards when data is loaded', async () => {
-    (usePhotos as any).mockReturnValue({
-      photos: mockPhotos,
-      loading: false,
-      error: ''
+  describe('when photos are successfully loaded', () => {
+    beforeEach(() => {
+      // Simulate that the hook returns the photos, with no loading or error.
+      (usePhotos as any).mockReturnValue({
+        photos: mockPhotos,
+        loading: false,
+        error: ''
+      });
+      render(<PhotoGallery />);
     });
 
-    render(<PhotoGallery />);
+    describe('verifying that the photo details are rendered in the correct places', () => {
+      it('should render the first photo title inside its heading element', async () => {
+        await waitFor(() => {
+          // Assume that the PhotoCard component renders the photo title as a heading
+          const titleHeading = screen.getByRole('heading', {
+            name: /Test Photo 1/i
+          });
+          expect(titleHeading).toBeInTheDocument();
+        });
+      });
 
-    // Wait for the photo cards to appear
-    await waitFor(() => {
-      expect(screen.getByText(/Test Photo 1/i)).toBeInTheDocument();
-      expect(screen.getByText(/Test Album 1/i)).toBeInTheDocument();
-      expect(screen.getByText(/User One/i)).toBeInTheDocument();
-      expect(screen.getByText(/Test Photo 2/i)).toBeInTheDocument();
+      it('should render the first album title in the element labeled "Album:"', async () => {
+        await waitFor(() => {
+          // Look for a paragraph whose text begins with "Album:" and then check that its parent contains the album title.
+          const albumParagraph = screen.getAllByText((content, element) => {
+            return (
+              element?.tagName.toLowerCase() === 'p' &&
+              content.startsWith('Album:')
+            );
+          })[0];
+          expect(albumParagraph).toHaveTextContent('Test Album 1');
+        });
+      });
+
+      it('should render the first user name in the element labeled "By:"', async () => {
+        await waitFor(() => {
+          // Look for a paragraph that starts with "By:" then verify it contains the user name.
+          const userParagraph = screen.getAllByText((content, element) => {
+            return (
+              element?.tagName.toLowerCase() === 'p' &&
+              content.startsWith('By:')
+            );
+          })[0];
+          expect(userParagraph).toHaveTextContent('User One');
+        });
+      });
     });
   });
 
-  it('renders filtering inputs and updates values', () => {
-    (usePhotos as any).mockReturnValue({
-      photos: [],
-      loading: false,
-      error: ''
+  describe('when no photos are available', () => {
+    beforeEach(() => {
+      (usePhotos as any).mockReturnValue({
+        photos: [],
+        loading: false,
+        error: ''
+      });
+      render(<PhotoGallery />);
     });
 
-    render(<PhotoGallery />);
+    describe('verifying the empty gallery state', () => {
+      it('should render an empty gallery when there are no photos', () => {
+        // Assume each PhotoCard is rendered with a test id "photo-card"
+        const photoCards = screen.queryAllByTestId('photo-card');
+        expect(photoCards.length).toBe(0);
+      });
+    });
+  });
 
-    // Find the input elements
-    const titleInput = screen.getByPlaceholderText(/Filter by title/i);
-    const albumInput = screen.getByPlaceholderText(/Filter by album.title/i);
-    const emailInput = screen.getByPlaceholderText(
-      /Filter by album.user.email/i
-    );
-    const limitInput = screen.getByPlaceholderText(/Page size \(limit\)/i);
-    const offsetInput = screen.getByPlaceholderText(/Offset/i);
+  describe('Filter form functionality', () => {
+    beforeEach(() => {
+      (usePhotos as any).mockReturnValue({
+        photos: [],
+        loading: false,
+        error: ''
+      });
+      render(<PhotoGallery />);
+    });
 
-    // Simulate user typing in filter inputs
-    fireEvent.change(titleInput, { target: { value: 'Sunset' } });
-    fireEvent.change(albumInput, { target: { value: 'Vacation' } });
-    fireEvent.change(emailInput, { target: { value: 'user@example.com' } });
-    fireEvent.change(limitInput, { target: { value: '5' } });
-    fireEvent.change(offsetInput, { target: { value: '10' } });
+    describe('when updating filter inputs', () => {
+      it('should update the photo title input value when a new value is entered', () => {
+        const titleInput = screen.getByLabelText(
+          /Photo Title/i
+        ) as HTMLInputElement;
+        fireEvent.change(titleInput, { target: { value: 'Sunset' } });
+        expect(titleInput.value).toBe('Sunset');
+      });
 
-    // Verify that the inputs have updated values
-    expect((titleInput as HTMLInputElement).value).toBe('Sunset');
-    expect((albumInput as HTMLInputElement).value).toBe('Vacation');
-    expect((emailInput as HTMLInputElement).value).toBe('user@example.com');
-    expect((limitInput as HTMLInputElement).value).toBe('5');
-    expect((offsetInput as HTMLInputElement).value).toBe('10');
+      it('should update the album title input value when a new value is entered', () => {
+        const albumInput = screen.getByLabelText(
+          /Album Title/i
+        ) as HTMLInputElement;
+        fireEvent.change(albumInput, { target: { value: 'Vacation' } });
+        expect(albumInput.value).toBe('Vacation');
+      });
+
+      it('should update the user email input value when a new value is entered', () => {
+        const emailInput = screen.getByLabelText(
+          /User Email/i
+        ) as HTMLInputElement;
+        fireEvent.change(emailInput, { target: { value: 'user@example.com' } });
+        expect(emailInput.value).toBe('user@example.com');
+      });
+
+      it('should update the page size (limit) input value when a new value is entered', () => {
+        const limitInput = screen.getByLabelText(
+          /Page Size \(Limit\)/i
+        ) as HTMLInputElement;
+        fireEvent.change(limitInput, { target: { value: '5' } });
+        expect(limitInput.value).toBe('5');
+      });
+
+      it('should update the offset input value when a new value is entered', () => {
+        const offsetInput = screen.getByLabelText(
+          /Offset/i
+        ) as HTMLInputElement;
+        fireEvent.change(offsetInput, { target: { value: '10' } });
+        expect(offsetInput.value).toBe('10');
+      });
+    });
   });
 });
