@@ -15,7 +15,7 @@ vi.mock('../../src/services/api', () => ({
 }));
 
 // Now, extract the mocked apiService from the imported namespace.
-const mockedApiService = apiServiceModule.apiService as {
+const mockedApiService = apiServiceModule.apiService as unknown as {
   get: ReturnType<typeof vi.fn>;
 };
 
