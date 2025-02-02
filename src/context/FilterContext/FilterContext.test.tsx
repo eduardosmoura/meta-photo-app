@@ -44,7 +44,7 @@ describe('FilterContext', () => {
   describe('when updating the filter values', () => {
     it('should update inputFilters when setInputFilters is called', () => {
       act(() => {
-        hookResult.result.current.setInputFilters((prev) => ({
+        hookResult.result.current.setInputFilters((prev: any) => ({
           ...prev,
           title: 'Sunset'
         }));
@@ -55,7 +55,7 @@ describe('FilterContext', () => {
     it('should update appliedFilters when applyFilters is called', () => {
       // First update inputFilters, then call applyFilters.
       act(() => {
-        hookResult.result.current.setInputFilters((prev) => ({
+        hookResult.result.current.setInputFilters((prev: any) => ({
           ...prev,
           title: 'Sunset'
         }));
