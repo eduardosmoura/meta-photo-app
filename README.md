@@ -1,80 +1,173 @@
-![reactjs-vite-tailwindcss-boilerplate](https://user-images.githubusercontent.com/16243531/217138979-b854309c-4742-4275-a705-f9fec5158217.jpg)
+# meta-photo-app
 
-# React Tailwindcss Boilerplate build with Vite
+MetaPhoto APP
 
-This is a boilerplate build with Vite, React 18, TypeScript, Vitest, Testing Library, TailwindCSS 3, Eslint and Prettier.
+## Table of Contents
 
-## What is inside?
+- [meta-photo-app](#meta-photo-app)
+  - [Table of Contents](#table-of-contents)
+  - [Overview](#overview)
+  - [Project Description](#project-description)
+  - [Code Structure](#code-structure)
+  - [Required Libraries \& Tools](#required-libraries--tools)
+  - [Setup and Installation](#setup-and-installation)
+  - [Compilation and Running](#compilation-and-running)
+    - [Development Mode](#development-mode)
+    - [Production Mode](#production-mode)
+  - [Running the Tests](#running-the-tests)
+  - [Live Deployment](#live-deployment)
+  - [Additional Notes](#additional-notes)
 
-This project uses many tools like:
+## Overview
 
-- [Vite](https://vitejs.dev)
-- [ReactJS](https://reactjs.org)
-- [TypeScript](https://www.typescriptlang.org)
-- [Vitest](https://vitest.dev)
-- [Testing Library](https://testing-library.com)
-- [Tailwindcss](https://tailwindcss.com)
-- [Eslint](https://eslint.org)
-- [Prettier](https://prettier.io)
+MetaPhoto App is a lightweight web application built with ReactJS and TypeScript that allows users to view photos enriched with metadata (album and user information) fetched from an API. Users can navigate through photos using pagination (with offset and customizable page size) and apply various filtering options. This project focuses on correct implementation of requirements rather than UI design, and incorporates modern tools and best practices.
 
-## Getting Started
+## Project Description
 
-### Install
+MetaPhoto App fetches photos from an API and enriches them with album and user details. The app supports filtering by photo title, album title, and user email. It also provides pagination controls to change the page size (limit) and offset. The focus is on the correct implementation of the functional requirements while leveraging modern React patterns and libraries.
 
-Create the project.
+## Code Structure
 
-```bash
-pnpm dlx degit joaopaulomoraes/reactjs-vite-tailwindcss-boilerplate my-app
+```text
+meta-photo-app/
+├── node_modules/
+├── public/
+│   └── index.html
+├── src/
+│   ├── components/
+│   │   ├── Avatar.tsx              # Renders images with a default placeholder on error
+│   │   ├── PhotoCard.tsx           # Displays an individual photo with metadata
+│   │   ├── PhotoGallery.tsx        # Main view for listing, filtering, and paginating photos
+│   │   └── SkeletonPhotoCard.tsx   # Skeleton loading component for photo cards
+│   ├── hooks/
+│   │   └── usePhotos.ts            # Custom hook to fetch and cache photos (using useMemo)
+│   ├── services/
+│   │   └── apiService.ts           # HTTP service for API calls using axios
+│   ├── utils/
+│   │   └── getProxiedUrl.ts        # Helper function to proxy image URLs if necessary
+│   ├── App.tsx                     # Main App component (with lazy loading for PhotoGallery)
+│   ├── index.tsx
+│   └── styles/
+│       └── index.css               # Tailwind CSS configuration
+├── tests/
+│   ├── Avatar.test.tsx             # Vitest tests for Avatar component
+│   ├── PhotoCard.test.tsx          # Vitest tests for PhotoCard component
+│   ├── PhotoGallery.test.tsx       # Vitest tests for PhotoGallery component
+│   ├── SkeletonPhotoCard.test.tsx  # Vitest tests for SkeletonPhotoCard component
+│   └── usePhotos.test.ts           # Vitest tests for usePhotos hook
+├── .env                          # Environment variables (use VITE_API_BASE_URL, etc.)
+├── package.json
+├── pnpm-lock.yaml
+├── tsconfig.json
+└── README.md
 ```
 
-Access the project directory.
+## Required Libraries & Tools
 
-```bash
-cd my-app
-```
+- **[Vite](https://vitejs.dev/):** Fast build tool and development server.
+- **[ReactJS](https://reactjs.org/):** UI library for building user interfaces.
+- **[TypeScript](https://www.typescriptlang.org/):** Typed superset of JavaScript.
+- **[Vitest](https://vitest.dev/):** Testing framework for Vite projects.
+- **[Testing Library](https://testing-library.com/):** Tools for testing React components.
+- **[Tailwind CSS](https://tailwindcss.com/):** Utility-first CSS framework.
+- **[Eslint](https://eslint.org/):** Linting tool to ensure code quality.
+- **[Prettier](https://prettier.io/):** Code formatter for consistent style.
+- **[Axios](https://axios-http.com/):** HTTP client for making API requests.
+- **React Toastify:** For displaying error and status notifications.
+- **React Loading Skeleton:** For loading skeleton React components.
 
-Install dependencies.
+## Setup and Installation
 
-```bash
-pnpm install
-```
+1. **Clone the Repository:**
 
-Serve with hot reload at <http://localhost:5173>.
+   ```bash
+   git clone https://github.com/yourusername/meta-photo-app.git
+   cd meta-photo-app
+   ```
+
+2. **Install Dependencies Using pnpm:**
+
+   ```bash
+   pnpm install --frozen-lockfile
+   ```
+
+3. **Environment Configuration:**
+
+   Create environment files for different environments. For example, create a `.env` file in the project root with:
+
+   ```dotenv
+   VITE_API_BASE_URL=https://meta-photo-api-murex.vercel.app
+   ```
+
+   (You can also create `.env.development`, `.env.production`, etc.)
+
+## Compilation and Running
+
+### Development Mode
+
+To run the project in development mode with live reload:
 
 ```bash
 pnpm run dev
 ```
 
-### Lint
+This will start the Vite development server.
 
-```bash
-pnpm run lint
-```
+### Production Mode
 
-### Typecheck
+To build and serve the project in production mode:
 
-```bash
-pnpm run typecheck
-```
+1. **Build the Project:**
 
-### Build
+   ```bash
+   pnpm run build
+   ```
 
-```bash
-pnpm run build
-```
+2. **Preview the Production Build:**
 
-### Test
+   ```bash
+   pnpm run preview
+   ```
+
+## Running the Tests
+
+The project uses Vitest for testing.
+
+To run tests, execute:
 
 ```bash
 pnpm run test
 ```
 
-View and interact with your tests via UI.
+To run tests in watch mode:
 
 ```bash
-pnpm run test:ui
+pnpm run test:watch
 ```
 
-## License
+## Live Deployment
 
-This project is licensed under the MIT License.
+A live deployment of the MetaPhoto App is available at:
+**[https://meta-photo-app.vercel.app/](https://meta-photo-app.vercel.app/)**
+
+## Additional Notes
+
+- **Cache API Calls with useMemo:**
+  The `usePhotos` hook caches API responses using the `useMemo` hook to avoid unnecessary network calls when filter parameters haven't changed. This improves performance by reducing duplicate API requests.
+
+- **Lazy Loading:**
+  Components like the `PhotoGallery` are lazily loaded using `React.lazy` and `Suspense`, which helps to improve the initial load time of the app.
+
+- **Skeleton Loading Effects:**
+  The app uses skeleton loading components (similar to Facebook) to provide a smooth loading experience while data is being fetched.
+
+- **Error Handling with Toaster:**
+  The app uses React Toastify to display error notifications and status updates to the user in a non-intrusive manner.
+
+- **Default Logo Placeholder:**
+  For images that fail to load, a default logo (or gravatar-like placeholder) is displayed, ensuring the UI remains consistent even when image requests fail.
+
+- **Linting and Formatting:**
+  ESLint and Prettier are configured to enforce code quality and consistent formatting throughout the project.
+
+This project is built with modern tools and best practices, ensuring a performant, maintainable, and scalable web application. Enjoy building and extending the MetaPhoto App!
