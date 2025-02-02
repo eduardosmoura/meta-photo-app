@@ -29,7 +29,7 @@ const HealthStatusTag: React.FC = () => {
 
   if (loading) {
     return (
-      <span className="inline-block px-2 py-1 bg-gray-200 text-gray-700 rounded-full text-sm">
+      <span className="inline-block rounded-full bg-gray-200 px-2 py-1 text-sm text-gray-700">
         Checking...
       </span>
     );
@@ -37,7 +37,7 @@ const HealthStatusTag: React.FC = () => {
 
   return (
     <span
-      className={`inline-block px-2 py-1 rounded-full text-sm ${
+      className={` inline-block rounded-full px-2 py-1 text-sm ${
         isHealthy ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'
       }`}
     >
