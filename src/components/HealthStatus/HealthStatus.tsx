@@ -1,8 +1,7 @@
-// src/components/HealthStatusTag.tsx
 import React, { useEffect, useState } from 'react';
 import { apiService } from '../../services/api';
 
-const HealthStatusTag: React.FC = () => {
+const HealthStatus: React.FC = () => {
   const [isHealthy, setIsHealthy] = useState<boolean | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -46,4 +45,4 @@ const HealthStatusTag: React.FC = () => {
   );
 };
 
-export default HealthStatusTag;
+export default HealthStatus;
