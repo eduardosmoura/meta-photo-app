@@ -37,6 +37,7 @@ meta-photo-app/
     ├── hooks/
     ├── services/
     ├── styles/
+    ├── types/
     └── utils/
 ```
 
