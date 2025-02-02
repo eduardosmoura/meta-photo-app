@@ -1,22 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { apiService } from '../../services/api';
 import { toast } from 'react-toastify';
-
-export interface Photo {
-  id: number;
-  title: string;
-  url: string;
-  thumbnailUrl: string;
-  album: {
-    id: number;
-    title: string;
-    user: {
-      id: number;
-      name: string;
-      email: string;
-    };
-  };
-}
+import { Photo } from 'types';
 
 export interface PhotoFilters {
   title?: string;
