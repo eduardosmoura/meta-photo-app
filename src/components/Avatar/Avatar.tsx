@@ -1,4 +1,5 @@
 import React from 'react';
+import { toast } from 'react-toastify';
 
 interface AvatarProps {
   src: string;
@@ -13,7 +14,9 @@ export const Avatar: React.FC<AvatarProps> = ({ src, alt, className }) => {
     e: React.SyntheticEvent<HTMLImageElement, Event>
   ) => {
     e.currentTarget.src = placeholderImage;
-    console.error(`Image load failed for: ${alt}`);
+    const message = `Image load failed for: ${alt}`;
+    toast.error(message);
+    console.error(message);
   };
 
   return (
