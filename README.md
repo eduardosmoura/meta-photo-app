@@ -31,8 +31,8 @@ MetaPhoto App fetches photos from an API and enriches them with album and user d
 ```text
 meta-photo-app/
 ├── public/
-    └── assets/
-├── src/
+|   └── assets/
+└── src/
     ├── components/
     ├── hooks/
     ├── services/
@@ -59,7 +59,7 @@ meta-photo-app/
 1. **Clone the Repository:**
 
    ```bash
-   git clone https://github.com/yourusername/meta-photo-app.git
+   git clone https://github.com/eduardosmoura/meta-photo-app.git
    cd meta-photo-app
    ```
 
