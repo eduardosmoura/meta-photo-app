@@ -1,17 +1,20 @@
 import React, { Suspense } from 'react';
 import { ToastContainer } from 'react-toastify';
+import { Loading } from 'components/Loading/Loading';
 import 'react-toastify/dist/ReactToastify.css';
 
-const PhotoGallery = React.lazy(() => import('../PhotoGallery/PhotoGallery'));
+const PhotoGallery = React.lazy(
+  () => import('./components/PhotoGallery/PhotoGallery')
+);
 
 const App: React.FC = () => {
   return (
-    <div>
-      <Suspense fallback={<div className="p-4">Loading...</div>}>
+    <>
+      <Suspense fallback={<Loading />}>
         <PhotoGallery />
       </Suspense>
       <ToastContainer position="top-right" autoClose={3000} />
-    </div>
+    </>
   );
 };
 
