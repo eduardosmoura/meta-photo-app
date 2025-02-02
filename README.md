@@ -34,6 +34,7 @@ meta-photo-app/
 |   └── assets/
 └── src/
     ├── components/
+    ├── context/
     ├── hooks/
     ├── services/
     ├── styles/
@@ -133,6 +134,9 @@ A live deployment of the MetaPhoto App is available at:
 
 - **Cache API Calls with useMemo:**
   The `usePhotos` hook caches API responses using the `useMemo` hook to avoid unnecessary network calls when filter parameters haven't changed. This improves performance by reducing duplicate API requests.
+
+- **Context API to manage filters state:**
+  The `FilterProvider` (and `useFilter` hook) encapsulate the `filter state` (both the input filters and the applied filters). The `FilterForm` component consumes the context to update the filter state and to trigger data reload only when the form is submitted.
 
 - **Lazy Loading:**
   Components like the `PhotoGallery` are lazily loaded using `React.lazy` and `Suspense`, which helps to improve the initial load time of the app.
