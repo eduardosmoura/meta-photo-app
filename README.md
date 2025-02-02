@@ -30,36 +30,14 @@ MetaPhoto App fetches photos from an API and enriches them with album and user d
 
 ```text
 meta-photo-app/
-├── node_modules/
 ├── public/
-│   └── index.html
+    └── assets/
 ├── src/
-│   ├── components/
-│   │   ├── Avatar.tsx              # Renders images with a default placeholder on error
-│   │   ├── PhotoCard.tsx           # Displays an individual photo with metadata
-│   │   ├── PhotoGallery.tsx        # Main view for listing, filtering, and paginating photos
-│   │   └── SkeletonPhotoCard.tsx   # Skeleton loading component for photo cards
-│   ├── hooks/
-│   │   └── usePhotos.ts            # Custom hook to fetch and cache photos (using useMemo)
-│   ├── services/
-│   │   └── apiService.ts           # HTTP service for API calls using axios
-│   ├── utils/
-│   │   └── getProxiedUrl.ts        # Helper function to proxy image URLs if necessary
-│   ├── App.tsx                     # Main App component (with lazy loading for PhotoGallery)
-│   ├── index.tsx
-│   └── styles/
-│       └── index.css               # Tailwind CSS configuration
-├── tests/
-│   ├── Avatar.test.tsx             # Vitest tests for Avatar component
-│   ├── PhotoCard.test.tsx          # Vitest tests for PhotoCard component
-│   ├── PhotoGallery.test.tsx       # Vitest tests for PhotoGallery component
-│   ├── SkeletonPhotoCard.test.tsx  # Vitest tests for SkeletonPhotoCard component
-│   └── usePhotos.test.ts           # Vitest tests for usePhotos hook
-├── .env                          # Environment variables (use VITE_API_BASE_URL, etc.)
-├── package.json
-├── pnpm-lock.yaml
-├── tsconfig.json
-└── README.md
+    ├── components/
+    ├── hooks/
+    ├── services/
+    ├── styles/
+    └── utils/
 ```
 
 ## Required Libraries & Tools
