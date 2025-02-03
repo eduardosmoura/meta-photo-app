@@ -12,8 +12,8 @@ const FilterForm: React.FC = () => {
     });
   };
 
-  const handleLimitChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value) || inputFilters.limit;
+  const handleLimitChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const value = parseInt(e.target.value);
     setInputFilters({
       ...inputFilters,
       limit: value
@@ -89,15 +89,21 @@ const FilterForm: React.FC = () => {
           <label htmlFor="limit" className="mb-1 font-medium">
             Page Size (Limit)
           </label>
-          <input
+          <select
             id="limit"
-            type="number"
             name="limit"
-            placeholder="Page size (limit)"
             className="border p-2"
             value={inputFilters.limit?.toString()}
             onChange={handleLimitChange}
-          />
+          >
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select>
         </div>
         <div className="flex flex-1 flex-col">
           <label htmlFor="offset" className="mb-1 font-medium">
