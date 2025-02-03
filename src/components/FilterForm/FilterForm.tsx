@@ -1,6 +1,12 @@
 import React, { ChangeEvent, FormEvent } from 'react';
 import { toast } from 'react-toastify';
 import { useFilter } from '../../context/FilterContext/FilterContext';
+import { Pagination } from '../Pagination/Pagination';
+import {
+  DEFAULT_LIMIT,
+  DEFAULT_MAX_PHOTOS,
+  DEFAULT_OFFSET
+} from 'utils/constants';
 
 const FilterForm: React.FC = () => {
   const { inputFilters, setInputFilters, applyFilters } = useFilter();
@@ -12,26 +18,19 @@ const FilterForm: React.FC = () => {
     });
   };
 
-  const handleLimitChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const value = parseInt(e.target.value);
-    setInputFilters({
-      ...inputFilters,
-      limit: value
-    });
-  };
-
-  const handleOffsetChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value) || inputFilters.offset;
-    setInputFilters({
-      ...inputFilters,
-      offset: value
-    });
-  };
-
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     applyFilters();
     toast.success('Filters applied.');
+  };
+
+  // When the user changes the page size via the select dropdown
+  const handleLimitChange = (newLimit: number) => {
+    setInputFilters({
+      ...inputFilters,
+      limit: newLimit,
+      offset: 0 // Reset the offset whenever limit changes.
+    });
   };
 
   return (
@@ -40,7 +39,8 @@ const FilterForm: React.FC = () => {
       className="mb-4 space-y-4"
       onSubmit={handleSubmit}
     >
-      <div className="flex flex-col gap-4 md:flex-row">
+      {/* Row with text inputs and the Apply Filters button */}
+      <div className="flex flex-col gap-4 md:flex-row md:items-end">
         <div className="flex flex-1 flex-col">
           <label htmlFor="title" className="mb-1 font-medium">
             Photo Title
@@ -83,48 +83,26 @@ const FilterForm: React.FC = () => {
             onChange={handleInputChange}
           />
         </div>
-      </div>
-      <div className="mt-4 flex flex-col gap-4 md:flex-row">
-        <div className="flex flex-1 flex-col">
-          <label htmlFor="limit" className="mb-1 font-medium">
-            Page Size (Limit)
-          </label>
-          <select
-            id="limit"
-            name="limit"
-            className="border p-2"
-            value={inputFilters.limit?.toString()}
-            onChange={handleLimitChange}
-          >
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="15">15</option>
-            <option value="20">20</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-          </select>
-        </div>
-        <div className="flex flex-1 flex-col">
-          <label htmlFor="offset" className="mb-1 font-medium">
-            Offset
-          </label>
-          <input
-            id="offset"
-            type="number"
-            name="offset"
-            placeholder="Offset"
-            className="border p-2"
-            value={inputFilters.offset?.toString()}
-            onChange={handleOffsetChange}
-          />
-        </div>
-        <div className="flex items-end">
+        <div className="flex items-center">
           <button type="submit" className="rounded bg-[#FF8C00] p-2 text-white">
             Apply Filters
           </button>
         </div>
       </div>
+      <Pagination
+        totalItems={DEFAULT_MAX_PHOTOS}
+        currentLimit={inputFilters.limit || DEFAULT_LIMIT}
+        currentOffset={inputFilters.offset || DEFAULT_OFFSET}
+        onLimitChange={handleLimitChange}
+        onPageChange={(newPage: number) => {
+          if (inputFilters.limit) {
+            setInputFilters({
+              ...inputFilters,
+              offset: (newPage - 1) * inputFilters.limit
+            });
+          }
+        }}
+      />
     </form>
   );
 };
