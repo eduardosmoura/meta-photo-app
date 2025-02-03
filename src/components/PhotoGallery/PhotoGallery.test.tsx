@@ -119,22 +119,6 @@ describe('PhotoGallery Component', () => {
         fireEvent.change(emailInput, { target: { value: 'user@example.com' } });
         expect(emailInput.value).toBe('user@example.com');
       });
-
-      it('should update the page size (limit) input value when a new value is entered', () => {
-        const limitInput = screen.getByLabelText(
-          /Page Size \(Limit\)/i
-        ) as HTMLInputElement;
-        fireEvent.change(limitInput, { target: { value: '5' } });
-        expect(limitInput.value).toBe('5');
-      });
-
-      it('should update the offset input value when a new value is entered', () => {
-        const offsetInput = screen.getByLabelText(
-          /Offset/i
-        ) as HTMLInputElement;
-        fireEvent.change(offsetInput, { target: { value: '10' } });
-        expect(offsetInput.value).toBe('10');
-      });
     });
   });
 });

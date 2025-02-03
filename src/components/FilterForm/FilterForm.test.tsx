@@ -6,15 +6,15 @@ import FilterForm from './FilterForm';
 import { FilterProvider } from '../../context/FilterContext/FilterContext';
 import { Id, toast, ToastContent, ToastOptions } from 'react-toastify';
 
-describe('FilterForm Component', () => {
-  // Create a wrapper that provides the FilterContext
-  const setup = () =>
-    render(
-      <FilterProvider>
-        <FilterForm />
-      </FilterProvider>
-    );
+// Helper to render the FilterForm wrapped in its context provider
+const setup = () =>
+  render(
+    <FilterProvider>
+      <FilterForm />
+    </FilterProvider>
+  );
 
+describe('FilterForm Component', () => {
   let toastSuccessSpy: MockInstance<
     [
       content: ToastContent<unknown>,
@@ -25,8 +25,65 @@ describe('FilterForm Component', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    // Create a spy on toast.success before each test
     toastSuccessSpy = vi.spyOn(toast, 'success');
+  });
+
+  describe('when rendering the filter form', () => {
+    beforeEach(() => {
+      setup();
+    });
+
+    it('should render the Photo Title input with its label', () => {
+      const photoTitleInput = screen.getByLabelText(/Photo Title/i);
+      expect(photoTitleInput).toBeInTheDocument();
+    });
+
+    it('should render the Album Title input with its label', () => {
+      const albumTitleInput = screen.getByLabelText(/Album Title/i);
+      expect(albumTitleInput).toBeInTheDocument();
+    });
+
+    it('should render the User Email input with its label', () => {
+      const userEmailInput = screen.getByLabelText(/User Email/i);
+      expect(userEmailInput).toBeInTheDocument();
+    });
+
+    it('should render the Apply Filters button', () => {
+      const applyButton = screen.getByRole('button', {
+        name: /Apply Filters/i
+      });
+      expect(applyButton).toBeInTheDocument();
+    });
+  });
+
+  describe('when updating filter inputs', () => {
+    beforeEach(() => {
+      setup();
+    });
+
+    it('should update the Photo Title input value when a new value is entered', () => {
+      const titleInput = screen.getByLabelText(
+        /Photo Title/i
+      ) as HTMLInputElement;
+      fireEvent.change(titleInput, { target: { value: 'Sunset' } });
+      expect(titleInput.value).toBe('Sunset');
+    });
+
+    it('should update the Album Title input value when a new value is entered', () => {
+      const albumInput = screen.getByLabelText(
+        /Album Title/i
+      ) as HTMLInputElement;
+      fireEvent.change(albumInput, { target: { value: 'Vacation' } });
+      expect(albumInput.value).toBe('Vacation');
+    });
+
+    it('should update the User Email input value when a new value is entered', () => {
+      const emailInput = screen.getByLabelText(
+        /User Email/i
+      ) as HTMLInputElement;
+      fireEvent.change(emailInput, { target: { value: 'user@example.com' } });
+      expect(emailInput.value).toBe('user@example.com');
+    });
   });
 
   describe('when submitting the filter form', () => {
@@ -40,50 +97,6 @@ describe('FilterForm Component', () => {
       await waitFor(() => {
         expect(toastSuccessSpy).toHaveBeenCalledWith('Filters applied.');
       });
-    });
-  });
-
-  describe('when updating filter input values', () => {
-    beforeEach(() => {
-      setup();
-    });
-
-    it('should update the photo title filter input value when a new value is entered', () => {
-      const titleInput = screen.getByLabelText(
-        /Photo Title/i
-      ) as HTMLInputElement;
-      fireEvent.change(titleInput, { target: { value: 'Sunset' } });
-      expect(titleInput.value).toBe('Sunset');
-    });
-
-    it('should update the album title filter input value when a new value is entered', () => {
-      const albumInput = screen.getByLabelText(
-        /Album Title/i
-      ) as HTMLInputElement;
-      fireEvent.change(albumInput, { target: { value: 'Vacation' } });
-      expect(albumInput.value).toBe('Vacation');
-    });
-
-    it('should update the user email filter input value when a new value is entered', () => {
-      const emailInput = screen.getByLabelText(
-        /User Email/i
-      ) as HTMLInputElement;
-      fireEvent.change(emailInput, { target: { value: 'user@example.com' } });
-      expect(emailInput.value).toBe('user@example.com');
-    });
-
-    it('should update the limit input value when a new value is entered', () => {
-      const limitInput = screen.getByLabelText(
-        /Page Size \(Limit\)/i
-      ) as HTMLInputElement;
-      fireEvent.change(limitInput, { target: { value: '5' } });
-      expect(limitInput.value).toBe('5');
-    });
-
-    it('should update the offset input value when a new value is entered', () => {
-      const offsetInput = screen.getByLabelText(/Offset/i) as HTMLInputElement;
-      fireEvent.change(offsetInput, { target: { value: '10' } });
-      expect(offsetInput.value).toBe('10');
     });
   });
 });
