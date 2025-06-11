@@ -26,6 +26,11 @@ MetaPhoto App is a lightweight web application built with ReactJS and TypeScript
 
 MetaPhoto App fetches photos from an API and enriches them with album and user details. The app supports filtering by photo title, album title, and user email. It also provides pagination controls to change the page size (limit) and offset. The focus is on the correct implementation of the functional requirements while leveraging modern React patterns and libraries.
 
+Filtering examples:
+<img width="1534" alt="Screenshot 2025-06-11 at 7 33 16 PM" src="https://github.com/user-attachments/assets/635e039a-f8cd-4077-bba5-5a5ad142ee2d" />
+
+<img width="1535" alt="Screenshot 2025-06-11 at 7 36 32 PM" src="https://github.com/user-attachments/assets/302c305b-b06f-4d73-baea-528da1300ad2" />
+
 ## Code Structure
 
 ```text
